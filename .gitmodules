@@ -1,0 +1,3 @@
+[submodule "cs61a-sp11"]
+	path = cs61a-sp11
+	url = https://github.com/Peh-Shin/cs61a-sp11.git

@@ -1,5 +1,0 @@
-;; ((* 4 5))
-;; (define (f a b) b)
-;; (define * 5)
-(define 2 3)
-;; (+ 2 4)
