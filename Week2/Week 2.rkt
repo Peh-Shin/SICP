@@ -78,56 +78,66 @@
 ;;Qn: What value is returned by (((double (double double))inc)5)?
 ;;Ans: 8 times of inc + 5 = 13
 ;
-;;Ex 1.42
-;(define (square x) (* x x))
-;
-;(define (compose prod1 prod2)
-;  (lambda (x) (prod1(prod2 x)))
-;  )
-;
-;((compose square inc) 6)
-;
-;;;Ex 1.43
-;;(define (repeated prod x)(
-;;                          (if (= x 0)
-;;                              0 
-;;                              (repeated (compose prod prod) (- x 1)) ;just prod or (compose prod prod)?
-;;                           )
-;;                          )
-;;                          )
-;;
-;;((repeated square 2) 5)
-;
-;
-;;Ex 1.7
+;Ex 1.42
+(define (square x) (* x x))
+
+(define (compose prod1 prod2)
+  (lambda (x) (prod1(prod2 x)))
+  )
+
+((compose square inc) 6)
+
+;Ex 1.43
+;(define (repeated prod times)
+;  (lambda (x) (
+;               (if (= times 0)
+;                   x
+;                   ((compose prod (repeated prod (- times 1))) x)
+;                  )
+;               )
+;   )
+;)
+
+(define (repeated prod times)
+                 (if (= times 0)
+                   (lambda (x) (x))
+                   ((compose prod (repeated prod (- times 1))))
+                  )
+
+
+  )
+((repeated square 2) 5)
+
+
+;Ex 1.7
 (define (iterative-improve good-enough? improve-guess)
   (lambda (guess x) (
                (if (good-enough? guess x)
                    guess
                    ((iterative-improve good-enough? improve-guess) (improve-guess guess x) x)
-                   )
                )
+             )
    )
   )
 ;
 ;
-;;;Square rooting
-;(define (good-enough? guess x)
-;  (< (abs (- (square guess) x)) 0.001))
-;
-;(define (average x y) 
-;  (/ (+ x y) 2))
-;
-;(define (improve guess x)
-;  (average guess (/ x guess)))
-;
-;(define (square-iter guess x)
-;         ((iterative-improve good-enough? improve) guess x)
-;         )
-;
-;;(square-iter 1.0 9)
-;
-;;Fixed point
+;;Square rooting
+(define (good-enough? guess x)
+  (< (abs (- (square guess) x)) 0.001))
+
+(define (average x y) 
+  (/ (+ x y) 2))
+
+(define (improve guess x)
+  (average guess (/ x guess)))
+
+(define (square-iter guess x)
+         ((iterative-improve good-enough? improve) guess x)
+         )
+
+(square-iter 0.1 9)
+
+;Fixed point
 (define tolerance 0.00001)
 
 (define (close-enough? v1 v2)
@@ -142,7 +152,7 @@
           (try next))))
 
 (define (fixed-point f first-guess)
-    ((iterative-improve close-enough? try) first-guess f)
+    ((iterative-improve close-enough? try) first-guess (f first-guess))
 )
 
 (fixed-point cos 1.0)
